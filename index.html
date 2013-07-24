@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html manifest="cache.manifest">
+  <head>
+    <meta charset="utf-8">
+    <title></title> <!-- TITLE -->
+
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="cleartype" content="on">
+
+    <!-- TODO
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/touch/apple-touch-icon-114x114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/touch/apple-touch-icon-72x72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="img/touch/apple-touch-icon-57x57-precomposed.png">
+    <link rel="shortcut icon" href="img/touch/apple-touch-icon.png"> -->
+
+    <!-- TODO
+    <meta name="msapplication-TileImage" content="img/touch/apple-touch-icon-144x144-precomposed.png">
+    <meta name="msapplication-TileColor" content="#222222"> -->
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content=""> <!-- TODO -->
+
+    <style type="text/css">
+      input { display: block; }
+    </style>
+  </head>
+  <body>
+    <form>
+      <input name="buyItemId" placeholder="Buy Item ID">
+      <input name="zipCode" placeholder="Zip Code">
+      <input type="submit" value="Submit">
+    </form>
+    <img>
+    <script src="app.min.js"></script>
+    <script>
+      require(['jquery'], function($) {
+        var generateUrl = function($form) {
+          var buyItemId = $("input[name=buyItemId]", $form).val();
+          var zipCode = $("input[name=zipCode]", $form).val();
+          return "/?buyItemId=" + buyItemId + "&zipcode=" + zipCode;
+        };
+
+        $("form").submit(function(eventObject) {
+          $("img").attr("src", generateUrl(this));
+          return false;
+        });
+      });
+    </script>
+  </body>
+</html>
