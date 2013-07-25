@@ -30,22 +30,26 @@
   </head>
   <body>
     <form>
-      <input name="buyItemId" placeholder="Buy Item ID" autofocus type="number" required>
+      <input name="campId" placeholder="Camp ID" type="number" required>
+      <input name="publisherId" placeholder="Publisher ID" required>
       <input name="zipCode" placeholder="Zip Code" type="number" required>
       <input type="submit" value="Submit">
     </form>
-    <img>
+    <div id="target">
+      <a><img></a>
+    </div>
     <script src="app.min.js"></script>
     <script>
       require(['jquery'], function($) {
         var generateUrl = function($form) {
-          var buyItemId = $("input[name=buyItemId]", $form).val();
+          var campId = $("input[name=campId]", $form).val();
+          var publisherId = $("input[name=publisherId]", $form).val();
           var zipCode = $("input[name=zipCode]", $form).val();
-          return "/?buyItemId=" + buyItemId + "&zipcode=" + zipCode;
+          return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=" + publisherId + "&ua=Mozilla&v=2.4&zip=" + zipCode;
         };
 
         $("form").submit(function(eventObject) {
-          $("img").attr("src", generateUrl(this));
+          $("iframe").attr("src", generateUrl(this));
           return false;
         });
       });
