@@ -30,14 +30,13 @@
   </head>
   <body>
     <form>
-      <input name="campId" placeholder="Camp ID" type="number" required>
+      <input name="campId" placeholder="Line Item ID" type="number" required>
       <input name="publisherId" placeholder="Publisher ID" required>
       <input name="zipCode" placeholder="Zip Code" type="number" required>
       <input type="submit" value="Submit">
     </form>
-    <div id="target">
-      <a><img></a>
-    </div>
+    <img src="bg.png" />
+    <iframe id="target" width="300" height="50"></iframe>
     <script src="app.min.js"></script>
     <script>
       require(['jquery'], function($) {
@@ -48,8 +47,8 @@
           return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=" + publisherId + "&ua=Mozilla&v=2.4&zip=" + zipCode;
         };
 
-        $("form").submit(function(eventObject) {
-          $("iframe").attr("src", generateUrl(this));
+        $("form").on("submit", function(eventObject) {
+          $("iframe#target").attr("src", generateUrl(this));
           return false;
         });
       });
