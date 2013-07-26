@@ -1,56 +1,103 @@
 <!DOCTYPE html>
-<html manifest="cache.manifest">
+<html>
   <head>
     <meta charset="utf-8">
-    <title></title> <!-- TITLE -->
+    <title>Ad Preview</title>
+
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+
+    <meta http-equiv="cleartype" content="on">
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Ad Preview">
 
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="cleartype" content="on">
 
     <!-- TODO
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="img/touch/apple-touch-icon-144x144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/touch/apple-touch-icon-114x114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/touch/apple-touch-icon-72x72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="img/touch/apple-touch-icon-57x57-precomposed.png">
-    <link rel="shortcut icon" href="img/touch/apple-touch-icon.png"> -->
-
-    <!-- TODO
+    <link rel="shortcut icon" href="img/touch/apple-touch-icon.png">
     <meta name="msapplication-TileImage" content="img/touch/apple-touch-icon-144x144-precomposed.png">
     <meta name="msapplication-TileColor" content="#222222"> -->
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content=""> <!-- TODO -->
-
+    <!-- Show background image in preview page -->
     <style type="text/css">
-      input { display: block; }
+      #preview {
+        background-image: url(bg.png);
+        background-size: 100%;
+        background-repeat: no-repeat;
+        background-position-y: 43px;
+      }
+
+      #ad-wrapper {
+        position: absolute;
+        top: 43px;
+        left: 3%;
+        width: 93%;
+        height: 100%;
+      }
+
+      #preview #ad-wrapper iframe {
+        width: 100%;
+        height: 7%;
+        margin-top: 12%;
+      }
     </style>
   </head>
   <body>
-    <form>
-      <input name="campId" placeholder="Line Item ID" type="number" required>
-      <input name="publisherId" placeholder="Publisher ID" required>
-      <input name="zipCode" placeholder="Zip Code" type="number" required>
-      <input type="submit" value="Submit">
-    </form>
-    <img src="bg.png" />
-    <iframe id="target" width="300" height="50"></iframe>
-    <script src="app.min.js"></script>
-    <script>
-      require(['jquery'], function($) {
-        var generateUrl = function($form) {
-          var campId = $("input[name=campId]", $form).val();
-          var publisherId = $("input[name=publisherId]", $form).val();
-          var zipCode = $("input[name=zipCode]", $form).val();
-          return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=" + publisherId + "&ua=Mozilla&v=2.4&zip=" + zipCode;
-        };
 
-        $("form").on("submit", function(eventObject) {
-          $("iframe#target").attr("src", generateUrl(this));
-          return false;
-        });
+    <div data-role="page" id="input">
+      <div data-role="header" data-position="fixed">
+        <h1>Ad Preview</h1>
+      </div>
+      <div data-role="content">
+        <form>
+          <label for="lineItemId">Line Item ID:</label>
+          <input name="lineItemId" type="number" required>
+
+          <label for="publisherId">Publisher ID:</label>
+          <input name="publisherId" required>
+
+          <label for="zipCode">Zip Code:</label>
+          <input name="zipCode" type="number" required>
+
+          <button type="submit" data-theme="b" name="submit">Preview</button>
+        </form>
+      </div>
+      <div data-role="footer" data-position="fixed"></div>
+    </div>
+
+    <div data-role="page" id="preview">
+      <div data-role="header" data-position="fixed">
+        <h1>Ad Preview</h1>
+        <a href="#input" data-icon="gear" class="ui-btn-right" data-transition="slide" data-direction="reverse">Edit</a>
+      </div>
+      <div data-role="content" id="ad-preview">
+        <div id="ad-wrapper"><iframe></iframe></div>
+      </div>
+      <div data-role="footer" data-position="fixed"></div>
+    </div>
+
+    <script type="text/javascript">
+      var generateUrl = function($form) {
+        var campId = $("input[name=campId]", $form).val();
+        var publisherId = $("input[name=publisherId]", $form).val();
+        var zipCode = $("input[name=zipCode]", $form).val();
+        return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=" + publisherId + "&ua=Mozilla&v=2.4&zip=" + zipCode;
+      };
+
+      $("form").on("submit", function(eventObject) {
+        var $adPreview = $("#ad-preview");
+        $("iframe", $adPreview).attr("src", generateUrl(this));
+        $.mobile.changePage("#preview", { transition: "slide" });
+        return false;
       });
     </script>
   </body>
