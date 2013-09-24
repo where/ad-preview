@@ -61,9 +61,6 @@
           <label for="lineItemId">Line Item ID:</label>
           <input name="lineItemId" type="number" required>
 
-          <label for="publisherId">Publisher ID:</label>
-          <input name="publisherId" required>
-
           <label for="zipCode">Zip Code:</label>
           <input name="zipCode" required>
 
@@ -87,9 +84,8 @@
     <script type="text/javascript">
       var generateUrl = function($form) {
         var campId = $("input[name=lineItemId]", $form).val();
-        var publisherId = $("input[name=publisherId]", $form).val();
         var zipCode = $("input[name=zipCode]", $form).val();
-        return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=" + publisherId + "&ua=Mozilla&v=2.4&zip=" + zipCode;
+        return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + campId + "&placementtype=320x50&pubid=test&ua=Mozilla&v=2.4&zip=" + zipCode;
       };
 
       $("form").on("submit", function(eventObject) {
