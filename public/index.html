@@ -32,21 +32,13 @@
         background-image: url(BannerHolderpng.png);
         background-repeat: no-repeat;
         background-size: 100%;
-        background-position: center;
         background-color: #e6e7e8;
+        background-position-x: 50%;
+        background-position-y: 75%;
       }
 
-      #ad-wrapper {
-        position: absolute;
-        top: 0;
-        left: 0%;
+      #ad-image {
         width: 100%;
-        height: 100%;
-      }
-
-      #preview #ad-wrapper iframe {
-        width: 100%;
-        height: 10%;
       }
     </style>
   </head>
@@ -76,7 +68,11 @@
         <a href="#input" data-icon="gear" class="ui-btn-right" data-transition="slide" data-direction="reverse">Edit</a>
       </div>
       <div data-role="content" id="ad-preview">
-        <div id="ad-wrapper"><iframe></iframe></div>
+        <div id="ad-wrapper">
+          <a id="ad" target="_blank">
+            <img id="ad-image">
+          </a>
+        </div>
       </div>
       <div data-role="footer" data-position="fixed"></div>
     </div>
@@ -85,13 +81,20 @@
       var generateUrl = function($form) {
         var lineItemId = $("input[name=lineItemId]", $form).val();
         var zipCode = $("input[name=zipCode]", $form).val();
-        return "http://ad.where.com/jin/spotlight/ads?context=WA&format=html&ip=38.44.234.343&netid=CAMP_" + lineItemId + "&placementtype=320x50&pubid=test&ua=Mozilla&v=2.4&zip=" + zipCode;
+        return "/ads/" + lineItemId + "/" + zipCode;
       };
 
       $("form").on("submit", function(eventObject) {
-        var $adPreview = $("#ad-preview");
-        $("iframe", $adPreview).attr("src", generateUrl(this));
-        $.mobile.changePage("#preview", { transition: "slide" });
+        $.ajax(generateUrl(this), {
+          dataType: "json",
+          complete: function(jqXHR) {
+            var data = $.parseJSON(jqXHR.responseText);
+            $("#ad").attr("href", data.url);
+            $("#ad-image").attr("src", data.image);
+            debugger;
+            $.mobile.changePage("#preview", { transition: "slide" });
+          }
+        });
         return false;
       });
     </script>
